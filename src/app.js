@@ -1,35 +1,48 @@
 import * as functions from './utils';
 
 export let typeSelect,
-  vehicleSelect,
-  modelSelect,
-  preco = document.createElement('h1');
+    vehicleSelect,
+    modelSelect,
+    preco = document.createElement('h1');
 
 export const url = ['http://fipeapi.appspot.com/api/1/carros'];
 
-const app = document.getElementById('app');
+(function () {
 
-function loadElements() {
-  //the title os fthe page
-  app.innerHTML = "<h1 align='center'>FIPE Table</h1>";
-  //first select    
-  typeSelect = functions.createSelect('type', '200px', '550px');
-  //second select
-  vehicleSelect = functions.createSelect('vehicle', '200px', '850px');
-  //third select    
-  modelSelect = functions.createSelect('model', '200px', '1150px');
+    const app = document.getElementById('app');    
 
-  //set the elements in document
-  app.appendChild(typeSelect);
-  app.appendChild(vehicleSelect);
-  app.appendChild(modelSelect);
-  app.appendChild(preco);
+    function carregaElementos() {
+        app.innerHTML = "<h1 align='center'>FIPE Table</h1>";
+        //primeira caixa de Seleção
+        typeSelect = functions.createSelect('type', '200px', '550px');
+        //select.addEventListener("click", updateSelects);
 
-  //fills the first select 
-  functions.getInfoFromFipeTable(url + '/marcas.json', function getResponse(array) {
-    functions.populateSelect(array, typeSelect);
-  });
-}
-document.addEventListener('DOMContentLoaded', function () {
-  loadElements();
-});
+        //segunda caixa de Seleção
+        vehicleSelect = functions.createSelect('vehicle', '200px', '850px');
+        //select.addEventListener("click", updateSelects);
+
+        //terceira caixa de Seleção    
+        modelSelect = functions.createSelect('model', '200px', '1150px');
+        //select.addEventListener("click", SetPrice);
+
+        //coloca os selects criados no document
+        console.log(app);
+        app.appendChild(typeSelect);
+        console.log(typeSelect);
+        app.appendChild(vehicleSelect);
+        console.log(vehicleSelect);
+        app.appendChild(modelSelect);
+        console.log(modelSelect);
+        app.appendChild(preco);
+        console.log(app);
+
+        //preenche primeiro select
+        functions.getInfoFromFipeTable(url + '/marcas.json', function getResponse(array) {
+            functions.populateSelect(array, typeSelect);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        carregaElementos();
+    });
+})();
+
