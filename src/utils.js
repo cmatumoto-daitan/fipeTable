@@ -1,7 +1,8 @@
 import * as components from "./app";
 
 let typeId,vehicleId, modelId;
-//receive a select and by the 'id' determine what to do
+
+//receives a select and by the 'id' determines what to do
 export function updateSelects(select) {
     if (select.target.selectedIndex !== -1) {
         components.preco.innerHTML = "";
@@ -39,25 +40,23 @@ export function createSelect(id, width = '100px', left, size = 4) {
     return select;
 }
 
-//limpa o select determinado
+//clear the select
 export function clearSelect(select) {
     while (select.options.length) {
         select.remove(0);
     }
 }
 
-//os dados retornados pelo get são inseridos no select determinado
+//the data returned by the get is inserted in the select determined
 export function populateSelect(array, actualSelect) {
-    console.log(actualSelect);
-    let select = AddAnOptionInSelect(actualSelect);
+    let select = addAnOptionInSelect(actualSelect);
     array.forEach(element => {
         select(element['name'], element['id']);
-        console.log(element);
     });
 }
 
-//determinando-se o select a ser preenchido, retorna uma função que preenche o select com os options
-export function AddAnOptionInSelect(elemSelect) {
+//when the select is detemined, returns a function that fills the select with options
+export function addAnOptionInSelect(elemSelect) {
     return function (name, value) {
         const elemOption = document.createElement("option");
         elemOption.text = name;
@@ -66,7 +65,7 @@ export function AddAnOptionInSelect(elemSelect) {
     }
 }
 
-//pega as informações da API pelo get retornando-as pelo callback 
+//catch the information by the url and returns in the callback
 export function getInfoFromFipeTable(urlSend, callback) {
     const xhr = new XMLHttpRequest();
     const url = urlSend;
