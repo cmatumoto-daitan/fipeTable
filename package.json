@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/cmatumoto-daitan/fipeTable#readme",
   "devDependencies": {
+    "babel-loader": "^7.1.4",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.15",
     "webpack-dev-server": "^3.1.3"
