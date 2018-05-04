@@ -67,6 +67,9 @@ export function addAnOptionInSelect(elemSelect) {
 
 //catch the information by the url and returns in the callback
 export function getInfoFromFipeTable(urlSend, callback) {
+  return new Promise((resolve, reject){
+
+  });
   const xhr = new XMLHttpRequest();
   const url = urlSend;
   xhr.responseType = 'json';
