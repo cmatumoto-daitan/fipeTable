@@ -10,19 +10,22 @@ export function updateSelects(select) {
     if (select.target.parentElement.id === 'type') {
       typeId = id;
       clearSelect(components.vehicleSelect);
-      getInfoFromFipeTable(components.url + '/veiculos/' + typeId + '.json', function getResponse(array) {
+      getInfoFromFipeTable(components.url + '/veiculos/' + typeId + '.json')
+      .then(function (array) {
         populateSelect(array, components.vehicleSelect);
       });
       clearSelect(components.modelSelect);
     } else if (select.target.parentElement.id === 'vehicle') {
       vehicleId = id;
       clearSelect(components.modelSelect);
-      getInfoFromFipeTable(components.url + '/veiculo/' + typeId + '/' + vehicleId + '.json', function getResponse(array) {
+      getInfoFromFipeTable(components.url + '/veiculo/' + typeId + '/' + vehicleId + '.json')
+      .then(function (array) {
         populateSelect(array, components.modelSelect);
       });
     } else {
       modelId = id;
-      getInfoFromFipeTable(components.url + '/veiculo/' + typeId + '/' + vehicleId + '/' + modelId + '.json', function getResponse(array) {
+      getInfoFromFipeTable(components.url + '/veiculo/' + typeId + '/' + vehicleId + '/' + modelId + '.json')
+      .then(function (array) {
         components.preco.innerHTML = "<br><h1 align='center'>" + (array['preco']) + "</h1>";
       });
     }
@@ -65,19 +68,19 @@ export function addAnOptionInSelect(elemSelect) {
   }
 }
 
-//catch the information by the url and returns in the callback
-export function getInfoFromFipeTable(urlSend, callback) {
-  return new Promise((resolve, reject){
-
-  });
-  const xhr = new XMLHttpRequest();
-  const url = urlSend;
-  xhr.responseType = 'json';
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      callback(xhr.response);
+//catch the information by the url and returns a promisse with the result
+export function getInfoFromFipeTable(urlSend) {
+  return new Promise((resolve, reject)=>{
+    const xhr = new XMLHttpRequest();
+    const url = urlSend;
+    xhr.responseType = 'json';
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        resolve(xhr.response);
+      }
     }
-  }
-  xhr.open('GET', url);
-  xhr.send();
+    xhr.open('GET', url);
+    xhr.send();
+  });
+  
 }
