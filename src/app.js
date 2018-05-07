@@ -13,11 +13,11 @@ function loadElements() {
   //the title os fthe page
   app.innerHTML = "<h1 align='center'>FIPE Table</h1>";
   //first select    
-  typeSelect = functions.createSelect('type', '200px', '550px');
+  typeSelect = functions.createSelect('type', '200px', '500px');
   //second select
-  vehicleSelect = functions.createSelect('vehicle', '200px', '850px');
+  vehicleSelect = functions.createSelect('vehicle', '200px', '800px');
   //third select    
-  modelSelect = functions.createSelect('model', '200px', '1150px');
+  modelSelect = functions.createSelect('model', '200px', '1100px');
 
   //set the elements in document
   app.appendChild(typeSelect);
@@ -26,10 +26,13 @@ function loadElements() {
   app.appendChild(preco);
 
   //fills the first select 
-  functions.getInfoFromFipeTable(url + '/marcas.json', function getResponse(array) {
-    functions.populateSelect(array, typeSelect);
-  });
-}
+  functions.getInfoFromFipeTable(url + '/marcas.json')
+  .then(
+    function(array){
+      functions.populateSelect(array, typeSelect);
+  })
+  .catch(function(e){alert(e);} 
+)};
 document.addEventListener('DOMContentLoaded', function () {
   loadElements();
 });
