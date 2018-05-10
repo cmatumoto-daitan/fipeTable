@@ -11,14 +11,14 @@ const url = 'http://fipeapi.appspot.com/api/1/carros';
 
 const app = document.getElementById('app');
 // clear the select
-export function clearSelect(select) {
+function clearSelect(select) {
   while (select.options.length) {
     select.remove(0);
   }
 }
 
 // catch the information by the url and returns a promisse with the result
-export function getInfoFromFipeTable(urlSend) {
+function getInfoFromFipeTable(urlSend) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -50,28 +50,25 @@ function populateSelect(array, actualSelect) {
 }
 
 // receives a select and by the 'id' determines what to do
-function updateSelects(select) {
+async function updateSelects(select) {
   if (select.target.selectedIndex !== -1) {
     preco.innerHTML = '';
     const id = select.target.parentElement.value;
     if (select.target.parentElement.id === 'type') {
       typeId = id;
       clearSelect(vehicleSelect);
-      getInfoFromFipeTable(`${url}/veiculos/${typeId}.json`)
-        .then((array) => { populateSelect(array, vehicleSelect); })
-        .catch();
+      const array = await getInfoFromFipeTable(`${url}/veiculos/${typeId}.json`);
+      populateSelect(array, vehicleSelect);
       clearSelect(modelSelect);
     } else if (select.target.parentElement.id === 'vehicle') {
       vehicleId = id;
       clearSelect(modelSelect);
-      getInfoFromFipeTable(`${url}/veiculo/${typeId}/${vehicleId}.json`)
-        .then((array) => { populateSelect(array, modelSelect); })
-        .catch();
+      const array = await getInfoFromFipeTable(`${url}/veiculo/${typeId}/${vehicleId}.json`);
+      populateSelect(array, modelSelect);
     } else {
       modelId = id;
-      getInfoFromFipeTable(`${url}/veiculo/${typeId}/${vehicleId}/${modelId}.json`)
-        .then((array) => { preco.innerHTML = (`<br><h1 align='center'>${array.preco}</h1>`); })
-        .catch();
+      const array = await getInfoFromFipeTable(`${url}/veiculo/${typeId}/${vehicleId}/${modelId}.json`);
+      preco.innerHTML = (`<br><h1 align='center'>${array.preco}</h1>`);
     }
   }
 }
@@ -87,7 +84,7 @@ function createSelect(id, width = '100px', left, size = 4) {
   return select;
 }
 
-export default function loadElements() {
+export default async function loadElements() {
   // the title of the page
   app.innerHTML = "<h1 align='center'>FIPE Table</h1>";
   // first select
@@ -104,6 +101,6 @@ export default function loadElements() {
   app.appendChild(preco);
 
   // fills the first select
-  getInfoFromFipeTable(`${url}/marcas.json`)
-    .then((array) => { populateSelect(array, typeSelect); });
+  const array = await getInfoFromFipeTable(`${url}/marcas.json`);
+  populateSelect(array, typeSelect);
 }
