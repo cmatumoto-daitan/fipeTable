@@ -52,32 +52,27 @@ function populateSelect(array, actualSelect) {
 // receives a select and by the 'id' determines what to do
 async function updateSelects(select) {
   if (select.target.selectedIndex !== -1) {
-    preco.innerHTML = '';
-    const id = select.target.parentElement.value;
-    if (select.target.parentElement.id === 'type') {
-      typeId = id;
-      clearSelect(vehicleSelect);
-      clearSelect(modelSelect);
-      await getInfoFromFipeTable(`${url}/veiculos/${typeId}.json`)
-        .then((succ) => {
-          populateSelect(succ, vehicleSelect);
-        })
-        .catch(err => console.log('Error: ', err));
-    } else if (select.target.parentElement.id === 'vehicle') {
-      vehicleId = id;
-      clearSelect(modelSelect);
-      await getInfoFromFipeTable(`${url}/veiculo/${typeId}/${vehicleId}.json`)
-        .then((succ) => {
-          populateSelect(succ, modelSelect);
-        })
-        .catch(err => console.log('Error: ', err));
-    } else {
-      modelId = id;
-      await getInfoFromFipeTable(`${url}/veiculo/${typeId}/${vehicleId}/${modelId}.json`)
-        .then((succ) => {
-          preco.innerHTML = (`<br><h1 align='center'>${succ.preco}</h1>`);
-        })
-        .catch(err => console.log('Error: ', err));
+    try {
+      preco.innerHTML = '';
+      const id = select.target.parentElement.value;
+      if (select.target.parentElement.id === 'type') {
+        typeId = id;
+        clearSelect(vehicleSelect);
+        const array = await getInfoFromFipeTable(`${url}/veiculos/${typeId}.json`);
+        populateSelect(array, vehicleSelect);
+        clearSelect(modelSelect);
+      } else if (select.target.parentElement.id === 'vehicle') {
+        vehicleId = id;
+        clearSelect(modelSelect);
+        const array = await getInfoFromFipeTable(`${url}/veiculo/${typeId}/${vehicleId}.json`);
+        populateSelect(array, modelSelect);
+      } else {
+        modelId = id;
+        const array = await getInfoFromFipeTable(`${url}/veiculo/${typeId}/${vehicleId}/${modelId}.json`);
+        preco.innerHTML = (`<br><h1 align='center'>${array.preco}</h1>`);
+      }
+    } catch (error) {
+      console.log('Erro:', error);
     }
   }
 }
@@ -110,6 +105,10 @@ export default async function loadElements() {
   app.appendChild(preco);
 
   // fills the first select
-  const array = await getInfoFromFipeTable(`${url}/marcas.json`);
-  populateSelect(array, typeSelect);
+  try {
+    const array = await getInfoFromFipeTable(`${url}/marcas.json`);
+    populateSelect(array, typeSelect);
+  } catch (error) {
+    console.log('Error:');
+  }
 }
